@@ -47,6 +47,7 @@ process.env.PORT or 8080
 **GET**
 200 (OK), list of documents.
 200 (OK), single document. 
+204 (No content)
 404 (Not Found), if ID not found or invalid.
 500 (Error)
 
