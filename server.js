@@ -25,6 +25,7 @@ app.use(bodyParser.urlencoded({'extended':'true'}));
 app.use(bodyParser.json());
 app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
 app.use(passport.initialize());
+app.use(passport.session());
 app.use(morgan('dev'));
 app.use(cors());
 app.use(compression());

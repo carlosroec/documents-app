@@ -59,7 +59,7 @@ exports.getDocument = function(req, res) {
 			res.statusCode = 500;
 			return res.send(err);
 		}
-		 
+
 		res.statusCode = 200;
 		res.json(document);
 	});
@@ -86,6 +86,11 @@ exports.putDocument = function(req, res) {
 			return res.send('Error 400: POST data invalid');
 		}
 
+		if (req.user.username != document.username) {
+			res.statusCode = 401;
+			return res.send('Error 401: Unauthorized');
+		}
+
 		// Update the existing document
 		document.author		= req.body.author;
 		document.contents 	= req.body.contents;
@@ -107,14 +112,34 @@ exports.putDocument = function(req, res) {
 
 // Create endpoint /api/documents/:document_id for DELETE
 exports.deleteDocument = function(req, res) {
+
 	// Use the Document model to find a specific document
-	Document.findByIdAndRemove(req.params.document_id, function(err) {
+	Document.findById(req.params.document_id, function(err, document) {
 		if (err) {
 			res.statusCode = 500;
 			return res.send(err);
 		}
 		
-		res.statusCode = 200;	
-		res.json('Status 200: Document deleted');
+		if (!document) {
+			res.statusCode = 404;
+			return res.send('Error 404: No document found');
+		}
+
+		if (req.user.username != document.username) {
+			res.statusCode = 401;
+			return res.send('Error 401: Unauthorized');
+		}
+
+		// Use the Document model to find a specific document
+		Document.findByIdAndRemove(req.params.document_id, function(err) {
+			if (err) {
+				res.statusCode = 500;
+				return res.send(err);
+			}
+			
+			res.statusCode = 200;	
+			res.json('Status 200: Document deleted');
+		});
 	});
+	
 };
