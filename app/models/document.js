@@ -1,7 +1,13 @@
+// Load required packages
 var mongoose = require('mongoose');
 
-module.exports = mongoose.model('Document', {
+// Define our beer schema
+var DocumentSchema   = new mongoose.Schema({
 	author: String,
 	contents: String,
-	published: Boolean
+	published: Boolean,
+	username: String
 });
+
+// Export the Mongoose model
+module.exports = mongoose.model('Document', DocumentSchema);
